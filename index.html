@@ -30,17 +30,19 @@ body{
   min-height:100vh;
   background:radial-gradient(circle at top,#0f2027,#000);
   display:flex;
-  align-items:center;
   justify-content:center;
-  overflow:hidden;
   color:#fff;
+
+  /* 🔑 IMPORTANTE */
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 
 /* ===============================
    Canvas
 ================================ */
 canvas{
-  position:absolute;
+  position:fixed;
   inset:0;
   z-index:0;
 }
@@ -53,6 +55,7 @@ canvas{
   gap:26px;
   z-index:2;
   align-items:center;
+  padding:60px 16px; /* 🔑 aire arriba y abajo */
 }
 
 /* ===============================
@@ -60,15 +63,16 @@ canvas{
 ================================ */
 .card{
   position:relative;
-  width:92%;
+  width:100%;
   max-width:380px;
-  padding:28px 22px 26px;
+  padding:26px 22px;
   background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
   backdrop-filter:blur(18px);
   border-radius:26px;
   border:1px solid var(--border-glass);
   text-align:center;
   z-index:2;
+
   opacity:0;
   transform:translateY(40px) scale(.96);
   animation:enter 1.2s ease forwards .4s, float 6s ease-in-out infinite;
@@ -78,12 +82,12 @@ canvas{
   content:"";
   position:absolute;
   left:50%;
-  bottom:-55px;
+  bottom:-45px;
   transform:translateX(-50%);
-  width:75%;
-  height:140px;
+  width:70%;
+  height:120px;
   background:radial-gradient(ellipse at center,rgba(0,255,156,.6),transparent 70%);
-  filter:blur(40px);
+  filter:blur(36px);
   z-index:-1;
 }
 
@@ -100,10 +104,10 @@ canvas{
    Avatar
 ================================ */
 .avatar{
-  width:96px;
-  height:96px;
+  width:90px;
+  height:90px;
   border-radius:50%;
-  margin:0 auto 14px;
+  margin:0 auto 12px;
   padding:5px;
   background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));
   box-shadow:0 0 30px rgba(0,255,156,.9);
@@ -120,19 +124,19 @@ canvas{
    Text
 ================================ */
 h1{
-  margin:10px 0 4px;
-  font-size:1.55rem;
+  margin:8px 0 4px;
+  font-size:1.45rem;
 }
 .role{
-  font-size:.85rem;
+  font-size:.82rem;
   opacity:.85;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 .desc{
-  font-size:.9rem;
+  font-size:.88rem;
   line-height:1.5;
   opacity:.9;
-  margin-bottom:22px;
+  margin-bottom:18px;
 }
 
 /* ===============================
@@ -141,16 +145,16 @@ h1{
 .socials{
   display:flex;
   justify-content:center;
-  gap:14px;
+  gap:12px;
 }
 .socials a{
-  width:52px;
-  height:52px;
+  width:48px;
+  height:48px;
   border-radius:14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:1.3rem;
+  font-size:1.25rem;
   color:#fff;
   text-decoration:none;
   background:rgba(0,0,0,.45);
@@ -170,8 +174,8 @@ h1{
    Footer
 ================================ */
 footer{
-  margin-top:18px;
-  font-size:.75rem;
+  margin-top:16px;
+  font-size:.72rem;
   opacity:.6;
 }
 
@@ -184,13 +188,13 @@ footer{
 
 .form-card h2{
   margin-bottom:14px;
-  font-size:1.2rem;
+  font-size:1.15rem;
 }
 
 form input,
 form textarea{
   width:100%;
-  padding:14px;
+  padding:13px;
   margin-bottom:12px;
   border-radius:14px;
   border:1px solid rgba(255,255,255,.18);
@@ -200,7 +204,7 @@ form textarea{
 }
 
 textarea{
-  min-height:110px;
+  min-height:100px;
   resize:none;
 }
 
@@ -222,11 +226,29 @@ form button{
 }
 
 /* ===============================
-   Responsive
+   MOBILE FIXES 🔥
 ================================ */
 @media(max-width:860px){
-  .layout{flex-direction:column;}
+
+  body{
+    align-items:flex-start;
+  }
+
+  .layout{
+    flex-direction:column;
+    padding-top:90px; /* 🔑 evita choque con top */
+  }
+
+  .card{
+    animation:enter 1.2s ease forwards .4s; /* ❌ sin float en mobile */
+  }
+
+  .card::after{
+    bottom:-35px;
+    height:90px;
+  }
 }
+
 </style>
 
 </head>
