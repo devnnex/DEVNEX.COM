@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Elkin R | Desarrollo Apps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+<style>
+:root {
+  --neon-green: #00ff9c;
+  --neon-cyan: #00eaff;
+  --neon-purple: #b400ff;
+  --glass-bg: rgba(255,255,255,.08);
+  --border-glass: rgba(255,255,255,.18);
+}
+
+*{
+  box-sizing:border-box;
+  font-family:"Segoe UI",system-ui,sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#0f2027,#000);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* ===============================
+   Canvas
+================================ */
+canvas{
+  position:absolute;
+  inset:0;
+  z-index:0;
+}
+
+/* ===============================
+   Layout
+================================ */
+.layout{
+  display:flex;
+  gap:26px;
+  z-index:2;
+  align-items:center;
+}
+
+/* ===============================
+   Cards (base)
+================================ */
+.card{
+  position:relative;
+  width:92%;
+  max-width:380px;
+  padding:28px 22px 26px;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));
+  backdrop-filter:blur(18px);
+  border-radius:26px;
+  border:1px solid var(--border-glass);
+  text-align:center;
+  z-index:2;
+  opacity:0;
+  transform:translateY(40px) scale(.96);
+  animation:enter 1.2s ease forwards .4s, float 6s ease-in-out infinite;
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-55px;
+  transform:translateX(-50%);
+  width:75%;
+  height:140px;
+  background:radial-gradient(ellipse at center,rgba(0,255,156,.6),transparent 70%);
+  filter:blur(40px);
+  z-index:-1;
+}
+
+@keyframes enter{
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+}
+
+/* ===============================
+   Avatar
+================================ */
+.avatar{
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  margin:0 auto 14px;
+  padding:5px;
+  background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));
+  box-shadow:0 0 30px rgba(0,255,156,.9);
+}
+.avatar img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  object-fit:cover;
+  background:#000;
+}
+
+/* ===============================
+   Text
+================================ */
+h1{
+  margin:10px 0 4px;
+  font-size:1.55rem;
+}
+.role{
+  font-size:.85rem;
+  opacity:.85;
+  margin-bottom:14px;
+}
+.desc{
+  font-size:.9rem;
+  line-height:1.5;
+  opacity:.9;
+  margin-bottom:22px;
+}
+
+/* ===============================
+   Socials
+================================ */
+.socials{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+}
+.socials a{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.3rem;
+  color:#fff;
+  text-decoration:none;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.15);
+  transition:.35s;
+}
+.socials a:hover{
+  transform:translateY(-6px) scale(1.05);
+}
+
+.instagram{color:var(--neon-purple);box-shadow:0 0 18px rgba(180,0,255,.7);}
+.whatsapp{color:var(--neon-green);box-shadow:0 0 18px rgba(0,255,156,.9);}
+.github{color:var(--neon-cyan);box-shadow:0 0 18px rgba(0,234,255,.8);}
+.linkedin{color:#00b4ff;box-shadow:0 0 18px rgba(0,180,255,.8);}
+
+/* ===============================
+   Footer
+================================ */
+footer{
+  margin-top:18px;
+  font-size:.75rem;
+  opacity:.6;
+}
+
+/* ===============================
+   Form Card
+================================ */
+.form-card{
+  max-width:420px;
+}
+
+.form-card h2{
+  margin-bottom:14px;
+  font-size:1.2rem;
+}
+
+form input,
+form textarea{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  outline:none;
+}
+
+textarea{
+  min-height:110px;
+  resize:none;
+}
+
+form button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));
+  color:#000;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 0 28px rgba(0,255,156,.8);
+}
+
+.status{
+  margin-top:10px;
+  font-size:.85rem;
+}
+
+/* ===============================
+   Responsive
+================================ */
+@media(max-width:860px){
+  .layout{flex-direction:column;}
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="neural"></canvas>
+
+<div class="layout">
+
+  <!-- CARD PRINCIPAL -->
+  <div class="card">
+    <div class="avatar">
+      <img src="images/logo.png" alt="Elkin R">
+    </div>
+
+    <h1>Elkin R</h1>
+    <div class="role">Desarrollo de Apps & Sistemas Inteligentes</div>
+
+    <div class="desc">
+      Desarrollo aplicaciones modernas para negocios que buscan
+      <strong>control, crecimiento y automatización real</strong>.
+    </div>
+
+    <div class="socials">
+      <a href="https://www.instagram.com/elkin.dev777/" target="_blank" class="instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://wa.me/573246394689" target="_blank" class="whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+      <!-- <a href="https://linkedin.com" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin-in"></i></a> -->
+    </div>
+
+    <footer>
+      © <span id="year"></span> Elk Ran | Devnex CEO
+    </footer>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card form-card">
+    <h2>Cuéntame tu idea</h2>
+
+    <form id="devForm">
+      <input name="nombre" placeholder="Nombre completo" required>
+      <input name="correo" type="email" placeholder="Correo" required>
+      <input name="telefono" placeholder="Teléfono / WhatsApp" required>
+      <textarea name="idea" placeholder="¿Qué te gustaría desarrollar o implementar?" required></textarea>
+      <button type="submit">Enviar idea</button>
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+/* ===============================
+   Año dinámico
+================================ */
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* ===============================
+   Canvas Deep Space + Neural
+================================ */
+const canvas = document.getElementById("neural");
+const ctx = canvas.getContext("2d");
+
+let w,h;
+let stars=[],nodes=[];
+const STAR_LAYERS=3,STARS_PER_LAYER=80,NODE_COUNT=60,MAX_DIST=120;
+
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
+
+/* Deep Space */
+class Star{
+  constructor(depth){this.depth=depth;this.reset();}
+  reset(){this.x=Math.random()*w;this.y=Math.random()*h;this.z=Math.random()*this.depth+.2;}
+  update(){this.y+=this.z*.15;if(this.y>h)this.reset();}
+  draw(){
+    ctx.fillStyle=`rgba(0,255,156,${.15+this.z*.4})`;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.z*1.2,0,Math.PI*2);ctx.fill();
+  }
+}
+
+for(let l=1;l<=STAR_LAYERS;l++)
+  for(let i=0;i<STARS_PER_LAYER;i++)
+    stars.push(new Star(l));
+
+/* Nodes */
+class Node{
+  constructor(){
+    this.x=Math.random()*w;this.y=Math.random()*h;
+    this.vx=(Math.random()-.5)*.25;
+    this.vy=(Math.random()-.5)*.25;
+  }
+  move(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<0||this.x>w)this.vx*=-1;
+    if(this.y<0||this.y>h)this.vy*=-1;
+  }
+}
+for(let i=0;i<NODE_COUNT;i++)nodes.push(new Node());
+
+function render(){
+  ctx.clearRect(0,0,w,h);
+  stars.forEach(s=>{s.update();s.draw();});
+  nodes.forEach(n=>{
+    n.move();
+    ctx.fillStyle="#00ff9c";
+    ctx.beginPath();ctx.arc(n.x,n.y,1.4,0,Math.PI*2);ctx.fill();
+  });
+  for(let i=0;i<nodes.length;i++)
+    for(let j=i+1;j<nodes.length;j++){
+      const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<MAX_DIST){
+        ctx.strokeStyle=`rgba(0,255,156,${1-dist/MAX_DIST})`;
+        ctx.lineWidth=.5;
+        ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();
+      }
+    }
+  requestAnimationFrame(render);
+}
+render();
+
+/* ===============================
+   Form submit
+================================ */
+const form=document.getElementById("devForm");
+const status=document.getElementById("status");
+
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  status.textContent="Enviando...";
+  const data=Object.fromEntries(new FormData(form).entries());
+  try{
+    const r=await fetch("https://script.google.com/macros/s/AKfycbxDGRiM0OEvdwCFy6hI5dAWS9IGDgyGVSopxFcVC_rR1Vjy8LunXLzEnuOJY6_zU_xf5g/exec",{method:"POST",body:JSON.stringify(data)});
+    if(r.ok){status.textContent="✨ Idea enviada correctamente";form.reset();}
+    else throw 0;
+  }catch{
+    status.textContent="❌ Error al enviar";
+  }
+});
+</script>
+</body>
+</html>
