@@ -265,7 +265,7 @@ form button{
     </div>
 
     <h1>Elkin R</h1>
-    <div class="role">Desarrollo de Apps & Sistemas Inteligentes</div>
+    <div class="role">Devnex CEO | Desarrollo de Apps & Sistemas Inteligentes</div>
 
     <div class="desc">
       Desarrollo aplicaciones modernas para negocios que buscan
@@ -383,16 +383,27 @@ const status=document.getElementById("status");
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
-  status.textContent="Enviando...";
+  status.textContent="Redirigiendo a WhatsApp...";
   const data=Object.fromEntries(new FormData(form).entries());
-  try{
-    const r=await fetch("https://script.google.com/macros/s/AKfycbxDGRiM0OEvdwCFy6hI5dAWS9IGDgyGVSopxFcVC_rR1Vjy8LunXLzEnuOJY6_zU_xf5g/exec",{method:"POST",body:JSON.stringify(data)});
-    if(r.ok){status.textContent="✨ Idea enviada correctamente";form.reset();}
-    else throw 0;
-  }catch{
-    status.textContent="❌ Error al enviar";
-  }
+
+  const message=[
+    "Hola, quiero cotizar una solucion con DEVNEX.",
+    "",
+    "*Datos del cliente:*",
+    `- Nombre: ${data.nombre}`,
+    `- Correo: ${data.correo}`,
+    `- Telefono/WhatsApp: ${data.telefono}`,
+    "",
+    "*Idea del proyecto:*",
+    data.idea
+  ].join("\n");
+
+  const whatsappUrl=`https://wa.me/573246394689?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl,"_blank");
+  status.textContent="Listo: se abrio WhatsApp con tu mensaje.";
+  form.reset();
 });
 </script>
 </body>
 </html>
+
